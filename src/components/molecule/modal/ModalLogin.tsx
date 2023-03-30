@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "../../../redux/feature/api/apiSlice";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,7 @@ import { LOGIN_SUCCESS } from "./../../../redux/authSlice";
 import { useDispatch } from "react-redux";
 import { loginSchema } from "../../../validations/login";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
 
 interface IModalLogin {
   open: boolean;
@@ -31,11 +33,11 @@ const StyledModal = styled(Modal)({
 });
 
 const ModalLogin = ({ open, handleClose, style }: IModalLogin) => {
+  const { messageError } = useSelector((state: any) => state.auth);
+  console.log(messageError);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsloading] = React.useState(false);
-  const [errorForm, setError] = React.useState(false);
-  const [login] = useLoginMutation();
+  const [login, { isSuccess, isError, isLoading }] = useLoginMutation();
   const {
     register,
     handleSubmit,
@@ -46,16 +48,10 @@ const ModalLogin = ({ open, handleClose, style }: IModalLogin) => {
 
   const onSubmit = async (data: loginState) => {
     try {
-      setIsloading(true);
       const response = await login(data);
       dispatch(LOGIN_SUCCESS(response));
-      console.log(response);
-      setIsloading(false);
       navigate("/list-cards");
-      handleClose();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -83,30 +79,29 @@ const ModalLogin = ({ open, handleClose, style }: IModalLogin) => {
           <TextField
             {...register("email")}
             name="email"
-            style={{ width: "100%", margin: "5px" }}
+            style={{ width: "100%", marginBottom: "1em" }}
             type="email"
             label="email here"
             variant="outlined"
           />
           {errors.email && (
             <Typography sx={{ color: "red" }}>
-              Email tidak boleh kosong
+              {errors.email.message as ReactNode}
             </Typography>
           )}
           <br />
           <TextField
             {...register("password")}
-            style={{ width: "100%", margin: "5px" }}
+            style={{ width: "100%" }}
             type="password"
             label="password"
             variant="outlined"
           />
           {errors.password && (
             <Typography sx={{ color: "red" }}>
-              Password cannot be empty or less than 8 chars
+              {errors.password.message as ReactNode}
             </Typography>
           )}
-          {/* {errors.password?.message} */}
           <br />
           <Button
             variant="contained"
@@ -116,12 +111,12 @@ const ModalLogin = ({ open, handleClose, style }: IModalLogin) => {
           >
             {isLoading ? <p>loading...</p> : <p>Login</p>}
           </Button>
-          {/* {errorForm && (
-            <Typography color="red">
-              your username or password might be wrong :(
-            </Typography>
-          )} */}
         </form>
+        {isError && (
+          <Alert severity="error" sx={{ marginTop: "1em" }}>
+            {messageError}
+          </Alert>
+        )}
       </Box>
     </StyledModal>
   );

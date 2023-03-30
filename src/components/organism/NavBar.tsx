@@ -47,7 +47,6 @@ export default function NavBar() {
               <Avatar sx={{ bgcolor: "yellow" }}>A</Avatar>
             ) : (
               <>
-                {" "}
                 <Button color="inherit" onClick={handleOpenLogin}>
                   Login
                 </Button>

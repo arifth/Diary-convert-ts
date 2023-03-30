@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 interface PublicRouteProps {
   children: any;
@@ -6,7 +7,12 @@ interface PublicRouteProps {
 
 const PublicRoute = (props: PublicRouteProps) => {
   const { children } = props;
-  return false ? <Navigate to="/" /> : children;
+  const { isLoggedIn } = useSelector((state: any) => state.isLoggedIn) || false;
+  return isLoggedIn === false ? (
+    <Navigate to={children} />
+  ) : (
+    <Navigate to={"/"} />
+  );
 };
 
 export default PublicRoute;

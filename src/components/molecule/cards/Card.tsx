@@ -9,8 +9,8 @@ import { ICardProps } from "../../../@types/CardProps";
 import dayjs from "dayjs";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import Link from "@mui/material/Link";
 import { useArchieveDiaryMutation } from "../../../redux/feature/api/apiSlice";
+import { Navigate, Link } from "react-router-dom";
 
 export default function CardBasic({
   id,
@@ -22,7 +22,7 @@ export default function CardBasic({
   const handleArchieve = async () => await Archieve(id);
   const handleEdit = () => alert("this is  edit");
   return (
-    <Card sx={{ Width: 345, Height: 250 }}>
+    <Card sx={{ Width: "400px", Height: "250px" }}>
       <CardContent>
         <CardMedia
           sx={{ borderRadius: "10px", marginBottom: "1em" }}
@@ -30,11 +30,12 @@ export default function CardBasic({
           height="140"
           image="https://source.unsplash.com/random/300x300/?city,night"
         />
-        <Link href={`/detail-card/${id}`} sx={{ textDecoration: "none" }}>
+        <Navigate to={`/detail-card/${id}`}>
           <Typography gutterBottom variant="h5" component="div">
             {title?.toUpperCase()}
           </Typography>
-        </Link>
+        </Navigate>
+
         <Typography
           variant="body2"
           color="text.secondary"

@@ -99,4 +99,5 @@ export const {
   useUpdateDiaryMutation,
   useArchieveDiaryMutation,
   useUnarchieveDiaryMutation,
+  endpoints,
 } = apiSlice;

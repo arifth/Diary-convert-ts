@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { apiSlice } from "./feature/api/apiSlice";
+import { endpoints } from "./feature/api/apiSlice";
 
 const initialState = {
   isLoggedIn: false,
+  messageSuccess: "",
+  messageError: "",
 };
 
 export const authSlice = createSlice({
@@ -18,7 +22,14 @@ export const authSlice = createSlice({
       localStorage.removeItem("token");
     },
   },
-  extraReducers: {},
+  extraReducers(builder) {
+    builder.addMatcher(
+      endpoints.login.matchRejected,
+      (state: any, action: any) => {
+        state.messageError = action.payload?.data?.message;
+      }
+    );
+  },
 });
 
 // Action creators are generated for each case reducer function

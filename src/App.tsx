@@ -7,15 +7,16 @@ const ListCards = React.lazy(() => import("./pages/ListCards"));
 const DetailCard = React.lazy(() => import("./pages/Detail"));
 
 function App() {
+  console.log(process.env);
   return (
     <Routes>
       <Route
         path="/"
         element={
           <React.Suspense fallback={<div>Loading...</div>}>
-            <PublicRoute>
-              <HomePage />
-            </PublicRoute>
+            {/* <PublicRoute> */}
+            <HomePage />
+            {/* </PublicRoute> */}
           </React.Suspense>
         }
       />

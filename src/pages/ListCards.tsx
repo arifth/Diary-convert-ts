@@ -52,7 +52,6 @@ const ListCards = () => {
   const {
     data: diaries,
     isLoading,
-    isSuccess,
     isError,
   } = useGetAllDiaryQuery({
     page: currentPage || 0,
